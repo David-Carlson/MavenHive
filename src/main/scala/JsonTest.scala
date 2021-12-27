@@ -1,10 +1,13 @@
 import ujson._
 import requests._
+import upickle.default._
 
 object JsonTest {
   def main(args: Array[String]): Unit = {
 //    sample()
-    req()
+//    req()
+
+    val wd = os.pwd/"spotifydata"
   }
   def req(): Unit = {
     val r = requests.get("https://api.github.com/users/lihaoyi")

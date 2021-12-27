@@ -1,12 +1,18 @@
 package Scraper
+import DataObjects.Track.toCSV
 import DataObjects.{Album, Artist, Playlist, Track}
+
 import scala.collection.mutable
 
 object DataWriter {
   val verbose = false
   def main(args: Array[String]): Unit = {
-    collectAndWriteAllData("doctorsalt")
+//    collectAndWriteAllData(sys.env("spotifyid"))
+    println("Starting")
+    collectAndWriteAllData("1249049206")
   }
+  // Rachel 1249049206
+
   def collectAndWriteAllData(username: String): Unit = {
     val startTime = System.nanoTime()
     val (genreMap, albums, artists, playlists, tracks) = DataCollector.startCollection(username)
@@ -20,8 +26,6 @@ object DataWriter {
     println(s"Collection took $collTime seconds")
     println(s"Writing music data for $username")
     val wd = os.pwd/"spotifydata"/username
-//    os.remove.all(wd)
-//    os.makeDir.all(wd)
 
     writeGenreMap(genreMap)
 
@@ -126,7 +130,11 @@ object DataWriter {
   def writeAlbumToTracks(tracks: mutable.Set[Track], username: String="doctorsalt"): Unit = {
     try {
       val path = os.pwd/"spotifydata"/username/"album_to_tracks.txt"
-      os.write.over(path, tracks.map(t => s"${t.album_id}|${t.id}").mkString("\n"),createFolders = true)
+      val without = tracks.filter(_.album_id.isEmpty)
+      println("Tracks without albums: ")
+      without.foreach(w => toCSV(w))
+      val tracksWithAlbum = tracks.filter(_.album_id.isDefined).map(t => s"${t.album_id.get}|${t.id}")
+      os.write.over(path, tracksWithAlbum.mkString("\n"),createFolders = true)
       if(verbose) println(s"Album/Tracks written to $path")
     } catch {
       case ex: java.io.IOException => println(ex, " Occured when writing Album/Tracks")

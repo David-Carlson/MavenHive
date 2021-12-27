@@ -80,10 +80,10 @@ object DataCollector {
     val track_count = albums.map(_.tracks).sum
     println(s"\nGetting approximately ${track_count} tracks")
     val albumTracks = albumIDSToAdd
-      .grouped(100)
+      .grouped(50)
       .zipWithIndex
       .map{ case (grp: mutable.Set[String], idx: Int) => {
-        println(s"Retrieving tracks from Albums ${idx * 100}/${albumIDSToAdd.size}")
+        println(s"Retrieving tracks from Albums ${idx * 50}/${albumIDSToAdd.size}")
         grp
       }}
       .flatMap(group => group.flatMap(a => SpotifyApi.getAlbumTracks(a)))

@@ -10,8 +10,9 @@ import ujson.Value
 import scala.collection.mutable.ArrayBuffer
 
 object SpotifyApi {
+  // https://developer.spotify.com/console/get-playlists/?user_id=doctorsalt&limit=&offset=
   val baseUrl = "https://api.spotify.com/v1"
-  val bearer = "BQCfZo2D32cTtI13KN5mFNuDi-PEaMhtlZoay8k-qsVF8wMLn6ZsnNTI8Z-OxCaZr_ADc13BdQo6gH5rvo_LTlPi9SPA17vuw9O5IwdJDpL6CV13rM_pEu6FhS3eAfpLSqBfmrdgrmyCEeHyaXSWQ9FPa3HXCubO7qXhA25wE4BgqHnrZ4P8d3ejSX_nkqlhWi6R4fE"
+  val bearer = sys.env("spotifytoken")
   def main(args: Array[String]): Unit = {
 
   }
