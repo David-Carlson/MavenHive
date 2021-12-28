@@ -21,7 +21,7 @@ object Track {
         val added = added_at.getOrElse("")
         val pop = popularity.getOrElse("")
 
-        s"$id|$name|$albID|$added|$duration|$track_number|$explicit|$pop"
+        s"$id|$name|$added|$duration|$track_number|$explicit|$pop"
     }
   }
 
@@ -43,10 +43,7 @@ object Track {
 //        println(all.map(_.getOrElse("%")).mkString(" | "))
         return None
       }
-      if (album_id.isEmpty) {
-        println("track field from playlist album not found")
-        println(println(all.map(_.getOrElse("%")).mkString(" | ")))
-      }
+
       val managedArtists = parseArtistField(artists)
       Some(Track(id.get, name.get, managedArtists, album_id, added_at, duration.get.toInt, track_number.get.toInt, explicit.get, Some(popularity.get.toInt)))
     } catch {

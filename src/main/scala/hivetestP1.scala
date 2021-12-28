@@ -8,7 +8,7 @@ object hivetestP1 {
     System.setProperty("hadoop.home.dir", "C:\\hadoop")
     val spark = SparkSession
       .builder
-      .appName("hello hive")
+      .appName("Spotify Analyzer")
       .config("spark.master", "local")
       .enableHiveSupport()
       .getOrCreate()

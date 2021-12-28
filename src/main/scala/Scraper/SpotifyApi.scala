@@ -173,11 +173,4 @@ object SpotifyApi {
     }
 
   }
-
-  def mapPlaylistTracks(playlistItems: ArrayBuffer[Value]): List[Option[Playlist]] = {
-    playlistItems
-      .map(_.obj)
-      .map(playlist => parsePlaylist(playlist))
-      .toList
-  }
 }

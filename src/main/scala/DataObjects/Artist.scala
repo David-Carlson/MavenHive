@@ -31,7 +31,7 @@ object Artist {
         return None
       }
 
-      Some(Artist(id.get, name.get, genres.get.map(_.str).toSet, popularity.get.toInt, followers.get.toInt))
+      Some(Artist(id.get, name.get.replace('|', ':'), genres.get.map(_.str).toSet, popularity.get.toInt, followers.get.toInt))
     } catch {
       case _: RuntimeException => None
     }

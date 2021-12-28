@@ -31,18 +31,31 @@ object DataCollector {
 //    }
   }
 
-  def startCollection(username: String): (Map[String, Int], mutable.Set[Album], mutable.Set[Artist], mutable.Set[Playlist], mutable.Set[Track]) = {
+  def startCollection(users: List[String]): (Map[String, Int], mutable.Set[Album], mutable.Set[Artist], mutable.Set[Playlist], mutable.Set[Track]) = {
     println("Starting Collection\n")
     // Get normal genres to start genre collection
     addGenres(SpotifyApi.getGenreSeeds().getOrElse(List.empty))
     if (genres.size == 0)
       throw new Exception("Collection failed, likely token error")
 
-    addPlaylists(SpotifyApi.getUserPlaylistIDS(username)
+    // TODO: REMOVE THE TAKE!
+    addPlaylists(users.map(SpotifyApi.getUserPlaylistIDS(_))
+      .flatMap(_.take(2))
       .map(SpotifyApi.getPlaylist(_))
       .filter(_.isDefined)
       .map(_.get)
-      .filter(_.owner_id == username))
+      .filter(p => users.contains(p.owner_id)))
+
+
+
+
+
+//    addPlaylists(SpotifyApi.getUserPlaylistIDS(username)
+//      .take(2)
+//      .map(SpotifyApi.getPlaylist(_))
+//      .filter(_.isDefined)
+//      .map(_.get)
+//      .filter(_.owner_id == username))
 
 //    addPlaylists(List(weddingPlaylist)
 //      .map(SpotifyApi.getPlaylist(_))
@@ -61,8 +74,11 @@ object DataCollector {
         playlists -= playlist
       }
     })
+
     if (albumIDSToAdd.isEmpty) {
       println("Found 0 albums to retrieve")
+    } else {
+      println("Retrieving Albums... ")
     }
     // get albums, adding new tracks to id list.
     val newAlbums = albumIDSToAdd
@@ -74,7 +90,6 @@ object DataCollector {
       }}
       .flatMap(SpotifyApi.getSeveralAlbums(_))
     addAlbums(newAlbums.toList)
-    addGenres(newAlbums.flatMap(_.genres).toList)
     addArtistIDS((newAlbums.flatMap(_.artists).toList))
 
     val track_count = albums.map(_.tracks).sum
